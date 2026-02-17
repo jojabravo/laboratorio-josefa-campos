@@ -233,31 +233,31 @@ const App: React.FC = () => {
 
       <footer className="bg-white border-t border-slate-200 py-10 px-6 mt-12">
         <div className="max-w-4xl mx-auto flex flex-col items-center text-center space-y-6">
-          
-          {/* Línea decorativa superior */}
-          <div className="w-16 h-1 bg-indigo-600 rounded-full mb-1"></div>
 
-          {/* Nombre con tamaño moderado */}
-          <div className="space-y-4">
-            <h4 className="text-slate-900 font-black text-2xl md:text-2xl tracking-tight">
-              Jorge Armando Jaramillo Bravo
-            </h4>
-            
-            {/* Etiquetas académicas con letra más pequeña */}
-            <div className="flex flex-col items-center gap-2">
-              <span className="bg-slate-50 px-5 py-1.5 rounded-full text-[13px] font-bold text-slate-500 border border-slate-100 shadow-sm cursor-default transition-all duration-300 hover:scale-105 hover:bg-white hover:shadow-md hover:text-indigo-600">
-                Lic. Matemáticas y Física (UdeA)
-              </span>
-              <span className="bg-slate-50 px-5 py-1.5 rounded-full text-[13px] font-bold text-slate-500 border border-slate-100 shadow-sm cursor-default transition-all duration-300 hover:scale-105 hover:bg-white hover:shadow-md hover:text-indigo-600">
-                Mag. En enseñanza de las ciencias exactas y naturales (UNAL)
-              </span>
-              <span className="bg-slate-50 px-5 py-1.5 rounded-full text-[13px] font-bold text-slate-500 border border-slate-100 shadow-sm cursor-default transition-all duration-300 hover:scale-105 hover:bg-white hover:shadow-md hover:text-indigo-600">
-                Doctorante en Educación (UTEL)
-              </span>
-            </div>
+        {/* Línea decorativa azul (opcional para estilo) */}
+        <div className="w-16 h-1 bg-indigo-600 rounded-full mb-1"></div>
+
+        <div className="space-y-4">
+        {/* Nombre con tamaño reducido (text-xl en lugar de text-3xl o 4xl) */}
+        <h4 className="text-slate-900 font-black text-xl tracking-tight">
+        Jorge Armando Jaramillo Bravo
+        </h4>
+      
+       {/* Etiquetas académicas con texto pequeño (text-[13px]) */}
+        <div className="flex flex-col items-center gap-2">
+        <span className="bg-slate-50 px-5 py-1.5 rounded-full text-[13px] font-bold text-slate-500 border border-slate-100 shadow-sm transition-all duration-300 hover:scale-105 hover:text-indigo-600">
+          Lic. Matemáticas y Física (UdeA)
+         </span>
+          <span className="bg-slate-50 px-5 py-1.5 rounded-full text-[13px] font-bold text-slate-500 border border-slate-100 shadow-sm transition-all duration-300 hover:scale-105 hover:text-indigo-600">
+          Mag. En enseñanza de las ciencias exactas y naturales (UNAL)
+          </span>
+          <span className="bg-slate-50 px-5 py-1.5 rounded-full text-[13px] font-bold text-slate-500 border border-slate-100 shadow-sm transition-all duration-300 hover:scale-105 hover:text-indigo-600">
+          Doctorante en Educación (UTEL)
+          </span>
+          </div>
           </div>
 
-          {/* Copyright Final */}
+          {/* Copyright con tamaño mínimo */}
           <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] pt-6">
             © 2026 LABORATORIO INTERACTIVO JOSEFA CAMPOS
           </p>
