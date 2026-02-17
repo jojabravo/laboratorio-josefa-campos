@@ -4,34 +4,34 @@ import { GoogleGenAI } from "@google/genai";
 export async function askPhysicsTutor(prompt: string, context?: string) {
   // Always use a new GoogleGenAI instance with process.env.API_KEY directly to ensure the latest key is used.
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  
   const systemInstruction = `
-    Eres un experto profesor de Física especializado en mecánica clásica. 
-    Tu objetivo es ayudar a estudiantes a entender conceptos como:
-    - Descomposición de vectores (uso de seno y coseno).
-    - Leyes de Newton (F = ma).
-    - Tensiones en cuerdas y poleas.
-    - Ley de Hooke (F = kx).
-    - Planos inclinados.
+    Eres un experto profesor de Física de la Institución Educativa Josefa Campos. 
+    Tu objetivo es ayudar a estudiantes de secundaria a entender la mecánica clásica.
     
-    Responde de forma clara, pedagógica y alentadora. Usa LaTeX para las fórmulas si es necesario.
-    Si el estudiante te da valores específicos, ayúdale a resolver el problema paso a paso.
-    Contexto actual de la simulación: ${context || "Información general de física"}.
+    Reglas de respuesta:
+    1. Responde de forma clara, pedagógica y alentadora.
+    2. Usa LaTeX para las fórmulas matemáticas (ej. $F = m \cdot a$).
+    3. Si el estudiante pregunta sobre descomposición de vectores, explica el uso de sen(θ) y cos(θ).
+    4. Mantén un tono motivador: "¡Excelente pregunta!", "¡Vamos a resolverlo juntos!".
+    
+    Contexto actual de la simulación: ${context || "Mecánica clásica general"}.
   `;
 
   try {
     const response = await ai.models.generateContent({
-      model: "gemini-3-pro-preview",
-      contents: prompt,
+      model: "gemini-3-flash-preview",
+      contents: [{ parts: [{ text: prompt }] }],
       config: {
-        systemInstruction,
+        systemInstruction: { parts: [{ text: systemInstruction }] },
         temperature: 0.7,
+        maxOutputTokens: 800,
       },
     });
 
-    // The GenerateContentResponse features a .text property to access the extracted string output.
-    return response.text || "Lo siento, no pude procesar tu duda en este momento.";
+    return response.text || "Lo siento, no pude generar una respuesta. Intenta reformular tu pregunta.";
   } catch (error) {
-    console.error("Error calling Gemini API:", error);
-    return "Ocurrió un error al conectar con el tutor de IA.";
+    console.error("Error en el Tutor IA:", error);
+    return "Tuve un pequeño problema técnico. ¿Podrías intentar preguntarme de nuevo? Estoy aquí para ayudarte.";
   }
 }
