@@ -101,12 +101,56 @@ const App: React.FC = () => {
               ¡ENTRAR AL LABORATORIO! 🚀
             </button>
           </div>
-          <div className="md:w-1/2 bg-indigo-600 p-8 flex items-center justify-center relative overflow-hidden">
+          <div className="md:w-1/2 bg-indigo-600 p-8 flex flex-col items-center justify-center relative overflow-hidden">
              <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32"></div>
              <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full -ml-24 -mb-24"></div>
-             <div className="text-white text-center space-y-4 relative z-10">
+             <div className="text-white text-center space-y-4 relative z-10 flex flex-col items-center">
                 <h2 className="text-2xl font-black uppercase tracking-widest">CIENCIA INTERACTIVA</h2>
                 <p className="text-sm opacity-80 font-medium px-4">Herramienta pedagógica diseñada para facilitar el aprendizaje de la mecánica clásica.</p>
+                
+                {/* Ilustración de Profesor y Estudiantes en Laboratorio */}
+                <div className="mt-6 w-full max-w-[280px]">
+                  <svg viewBox="0 0 240 160" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto drop-shadow-2xl">
+                    {/* Mesa de Laboratorio */}
+                    <rect x="30" y="110" width="180" height="8" rx="4" fill="white" fillOpacity="0.2" />
+                    <rect x="40" y="118" width="6" height="30" rx="3" fill="white" fillOpacity="0.1" />
+                    <rect x="194" y="118" width="6" height="30" rx="3" fill="white" fillOpacity="0.1" />
+                    
+                    {/* Profesor (Izquierda) */}
+                    <g transform="translate(45, 25)">
+                      {/* Cuerpo */}
+                      <rect x="0" y="35" width="24" height="60" rx="12" fill="white" />
+                      {/* Cabeza */}
+                      <circle cx="12" cy="18" r="14" fill="white" />
+                      {/* Lentes/Ojos decorativos */}
+                      <rect x="5" y="15" width="14" height="2" rx="1" fill="#4f46e5" />
+                      {/* Brazo señalando */}
+                      <path d="M22 55 L45 40" stroke="white" strokeWidth="6" strokeLinecap="round" />
+                    </g>
+                    
+                    {/* Estudiante 1 (Derecha) */}
+                    <g transform="translate(165, 55)">
+                      <rect x="0" y="25" width="20" height="40" rx="10" fill="white" fillOpacity="0.7" />
+                      <circle cx="10" cy="10" r="10" fill="white" fillOpacity="0.7" />
+                    </g>
+                    
+                    {/* Estudiante 2 (Centro) */}
+                    <g transform="translate(120, 60)">
+                      <rect x="0" y="20" width="20" height="35" rx="10" fill="white" fillOpacity="0.8" />
+                      <circle cx="10" cy="8" r="9" fill="white" fillOpacity="0.8" />
+                    </g>
+                    
+                    {/* Equipo de Física sobre la mesa (Beaker y Péndulo) */}
+                    <rect x="145" y="90" width="12" height="20" rx="2" stroke="white" strokeWidth="2" strokeOpacity="0.6" />
+                    <line x1="100" y1="110" x2="100" y2="70" stroke="white" strokeWidth="2" strokeOpacity="0.5" />
+                    <circle cx="100" cy="70" r="4" fill="white" fillOpacity="0.5" />
+                    
+                    {/* Átomos decorativos flotando */}
+                    <circle cx="200" cy="30" r="3" fill="white" fillOpacity="0.4" className="animate-pulse" />
+                    <circle cx="30" cy="140" r="4" fill="white" fillOpacity="0.2" />
+                    <path d="M210 20 Q 220 30 210 40" stroke="white" strokeWidth="1" strokeOpacity="0.3" fill="none" />
+                  </svg>
+                </div>
              </div>
           </div>
         </div>
@@ -188,17 +232,35 @@ const App: React.FC = () => {
       </div>
 
       <footer className="bg-white border-t border-slate-200 py-10 px-6 mt-12">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="text-center md:text-left">
-            <h4 className="text-slate-900 font-black text-lg">Jorge Armando Jaramillo Bravo</h4>
-            <p className="text-indigo-600 font-bold text-xs uppercase tracking-widest mt-1">Director del Laboratorio</p>
+        <div className="max-w-4xl mx-auto flex flex-col items-center text-center space-y-6">
+          
+          {/* Línea decorativa superior */}
+          <div className="w-16 h-1 bg-indigo-600 rounded-full mb-1"></div>
+
+          {/* Nombre con tamaño moderado */}
+          <div className="space-y-4">
+            <h4 className="text-slate-900 font-black text-2xl md:text-2xl tracking-tight">
+              Jorge Armando Jaramillo Bravo
+            </h4>
+            
+            {/* Etiquetas académicas con letra más pequeña */}
+            <div className="flex flex-col items-center gap-2">
+              <span className="bg-slate-50 px-5 py-1.5 rounded-full text-[13px] font-bold text-slate-500 border border-slate-100 shadow-sm cursor-default transition-all duration-300 hover:scale-105 hover:bg-white hover:shadow-md hover:text-indigo-600">
+                Lic. Matemáticas y Física (UdeA)
+              </span>
+              <span className="bg-slate-50 px-5 py-1.5 rounded-full text-[13px] font-bold text-slate-500 border border-slate-100 shadow-sm cursor-default transition-all duration-300 hover:scale-105 hover:bg-white hover:shadow-md hover:text-indigo-600">
+                Mag. En enseñanza de las ciencias exactas y naturales (UNAL)
+              </span>
+              <span className="bg-slate-50 px-5 py-1.5 rounded-full text-[13px] font-bold text-slate-500 border border-slate-100 shadow-sm cursor-default transition-all duration-300 hover:scale-105 hover:bg-white hover:shadow-md hover:text-indigo-600">
+                Doctorante en Educación (UTEL)
+              </span>
+            </div>
           </div>
-          <div className="flex flex-wrap justify-center gap-2 max-w-lg">
-            <span className="bg-slate-100 px-3 py-1 rounded-full text-[10px] font-bold text-slate-500 border border-slate-200">Lic. Matemáticas y Física (UdeA)</span>
-            <span className="bg-slate-100 px-3 py-1 rounded-full text-[10px] font-bold text-slate-500 border border-slate-200">Mag. Enseñanza de las Ciencias (UNAL)</span>
-            <span className="bg-slate-100 px-3 py-1 rounded-full text-[10px] font-bold text-slate-500 border border-slate-200">Doctorante en Educación (UTEL)</span>
-          </div>
-          <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest">© 2026 I.E. Josefa Campos</p>
+
+          {/* Copyright Final */}
+          <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] pt-6">
+            © 2026 LABORATORIO INTERACTIVO JOSEFA CAMPOS
+          </p>
         </div>
       </footer>
 
