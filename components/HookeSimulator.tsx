@@ -168,7 +168,15 @@ const ControlSlider: React.FC<ControlSliderProps> = ({ label, value, unit, min, 
     <div className="flex justify-between text-[11px] font-black text-slate-500 uppercase tracking-tighter">
       <span>{label}</span><span className="text-indigo-600 font-mono bg-white px-2 rounded border border-slate-200">{value}{unit}</span>
     </div>
-    <input type="range" min={min} max={max} step={step} value={value} onChange={(e) => onChange(Number(e.target.value))} className={`w-full h-1.5 rounded-lg appearance-none cursor-pointer bg-slate-200 accent-indigo-600`} />
+    <input 
+      type="range" 
+      min={min} 
+      max={max} 
+      step={step} 
+      value={value} 
+      onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(Number(e.target.value))} 
+      className={`w-full h-1.5 rounded-lg appearance-none cursor-pointer bg-slate-200 accent-indigo-600`} 
+    />
   </div>
 );
 
