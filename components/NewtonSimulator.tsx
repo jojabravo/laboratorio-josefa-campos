@@ -12,6 +12,7 @@ const NewtonSimulator: React.FC = () => {
   const [appliedForce, setAppliedForce] = useState<number>(0);
   const [angle, setAngle] = useState<number>(30);
   const [showFBD, setShowFBD] = useState(true);
+  const [showCartesian, setShowCartesian] = useState(false);
   
   // position representa el desplazamiento acumulado de m1 en la rampa.
   const [position, setPosition] = useState(0); 
@@ -125,9 +126,17 @@ const NewtonSimulator: React.FC = () => {
             <h2 className="text-3xl font-black text-slate-800 tracking-tighter">Dinámica en Plano</h2>
             <p className="text-slate-500 text-[10px] uppercase tracking-[0.3em] font-black italic">Leyes de Newton e Interacción</p>
           </div>
-          <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200 shadow-inner">
-            <button onClick={() => { setMode('simple'); reset(); }} className={`px-4 py-2 text-[10px] font-black rounded-lg transition-all ${mode === 'simple' ? 'bg-white shadow text-indigo-600' : 'text-slate-400'}`}>MASA ÚNICA</button>
-            <button onClick={() => { setMode('coupled'); reset(); }} className={`px-4 py-2 text-[10px] font-black rounded-lg transition-all ${mode === 'coupled' ? 'bg-white shadow text-indigo-600' : 'text-slate-400'}`}>MASAS ACOPLADAS</button>
+          <div className="flex flex-wrap gap-2">
+            <button 
+              onClick={() => setShowCartesian(!showCartesian)} 
+              className={`px-4 py-2 text-[10px] font-black rounded-xl transition-all border ${showCartesian ? 'bg-indigo-600 text-white border-indigo-700 shadow-md' : 'bg-slate-100 text-slate-500 border-slate-200'}`}
+            >
+              DIAGRAMA CUERPO LIBRE {showCartesian ? 'ON' : 'OFF'}
+            </button>
+            <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200 shadow-inner">
+              <button onClick={() => { setMode('simple'); reset(); }} className={`px-4 py-2 text-[10px] font-black rounded-lg transition-all ${mode === 'simple' ? 'bg-white shadow text-indigo-600' : 'text-slate-400'}`}>MASA ÚNICA</button>
+              <button onClick={() => { setMode('coupled'); reset(); }} className={`px-4 py-2 text-[10px] font-black rounded-lg transition-all ${mode === 'coupled' ? 'bg-white shadow text-indigo-600' : 'text-slate-400'}`}>MASAS ACOPLADAS</button>
+            </div>
           </div>
         </div>
         
@@ -170,6 +179,7 @@ const NewtonSimulator: React.FC = () => {
                 <marker id="arr-grn-n" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#10b981" /></marker>
                 <marker id="arr-yel-n" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#eab308" /></marker>
                 <marker id="arr-pur-n" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#a855f7" /></marker>
+                <marker id="arr-org-n" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#f59e0b" /></marker>
               </defs>
               
               <path d={`M ${rampBaseX} ${rampBaseY} L ${apexX} ${rampBaseY} L ${apexX} ${apexY} Z`} fill="#cbd5e1" stroke="#475569" strokeWidth="2" />
@@ -179,13 +189,33 @@ const NewtonSimulator: React.FC = () => {
                 <rect x="-30" y="-60" width="60" height="60" rx="8" fill="#3b82f6" stroke="#1e40af" strokeWidth="3" />
                 <text x="0" y="-30" textAnchor="middle" fill="white" fontSize="12" fontWeight="black">M1</text>
                 
+                {showCartesian && (
+                  <g>
+                    {/* Ejes Cartesianos Rotados */}
+                    <line x1="-100" y1="-30" x2="100" y2="-30" stroke="#94a3b8" strokeWidth="1" strokeDasharray="4" />
+                    <line x1="0" y1="-100" x2="0" y2="100" stroke="#94a3b8" strokeWidth="1" strokeDasharray="4" />
+                    <text x="90" y="-35" fill="#64748b" fontSize="8" fontWeight="black">X</text>
+                    <text x="5" y="-90" fill="#64748b" fontSize="8" fontWeight="black">Y</text>
+
+                    {/* Componentes del Peso */}
+                    {/* Py (perpendicular) */}
+                    <line x1="0" y1="-30" x2="0" y2={-30 + (py1 * 0.4)} stroke="#f59e0b" strokeWidth="2.5" markerEnd="url(#arr-org-n)" strokeDasharray="3,2" />
+                    <text x="5" y={-30 + (py1 * 0.4)} fill="#b45309" fontSize="9" fontWeight="bold">Py</text>
+                    
+                    {/* Px (paralelo) */}
+                    <line x1="0" y1="-30" x2={-(px1 * 0.4)} y2="-30" stroke="#f59e0b" strokeWidth="2.5" markerEnd="url(#arr-org-n)" strokeDasharray="3,2" />
+                    <text x={-(px1 * 0.4) - 15} y="-15" fill="#b45309" fontSize="9" fontWeight="bold">Px</text>
+                  </g>
+                )}
+
                 {showFBD && (
                   <g>
+                    {/* Fuerza Normal */}
                     <line x1="0" y1="-30" x2="0" y2={-30 - (py1 * 0.4)} stroke="#eab308" strokeWidth="3" markerEnd="url(#arr-yel-n)" />
                     {frictionCoeff > 0 && (
                       <line 
-                        x1={velocity >= 0 ? 30 : -30} y1="-2" 
-                        x2={velocity >= 0 ? -30 : 30} y2="-2" 
+                        x1={velocity >= 0 ? 30 : -30} y1="-30" 
+                        x2={velocity >= 0 ? -30 - frictionMax*0.4 : 30 + frictionMax*0.4} y2="-30" 
                         stroke="#a855f7" strokeWidth="3" markerEnd="url(#arr-pur-n)" 
                       />
                     )}
@@ -193,6 +223,7 @@ const NewtonSimulator: React.FC = () => {
                       <line x1="30" y1="-30" x2={30 + (mode === 'coupled' ? tension : appliedForce) * 0.4} y2="-30" stroke="#ef4444" strokeWidth="3" markerEnd="url(#arr-red-n)" />
                     )}
                     <g transform={`rotate(${angle}, 0, -30)`}>
+                        {/* Peso Real (Vertical) */}
                         <line x1="0" y1="-30" x2="0" y2={-30 + (mass1 * g) * 0.4} stroke="#10b981" strokeWidth="3" markerEnd="url(#arr-grn-n)" />
                     </g>
                   </g>
@@ -223,10 +254,10 @@ const NewtonSimulator: React.FC = () => {
               )}
             </svg>
             <div className="absolute top-4 left-4 bg-white/90 backdrop-blur px-4 py-2 rounded-xl border border-slate-200 text-[9px] font-black uppercase tracking-widest text-slate-500 shadow-sm flex flex-col gap-1 z-20">
-               <div className="flex items-center gap-2 font-mono">T: {tension.toFixed(1)} N</div>
-               <div className="flex items-center gap-2"><span className="w-2 h-2 bg-emerald-500 rounded-full"></span> Peso</div>
+               <div className="flex items-center gap-2 font-mono text-indigo-600">T: {tension.toFixed(1)} N</div>
+               <div className="flex items-center gap-2"><span className="w-2 h-2 bg-emerald-500 rounded-full"></span> Peso (W)</div>
                <div className="flex items-center gap-2"><span className="w-2 h-2 bg-rose-500 rounded-full"></span> Tensión/Fuerza</div>
-               <div className="flex items-center gap-2"><span className="w-2 h-2 bg-purple-500 rounded-full"></span> Fricción</div>
+               <div className="flex items-center gap-2"><span className="w-2 h-2 bg-amber-500 rounded-full"></span> Componentes Peso</div>
             </div>
           </div>
         </div>
