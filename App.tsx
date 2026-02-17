@@ -84,11 +84,9 @@ const App: React.FC = () => {
       <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4 overflow-hidden">
         <div className="max-w-4xl w-full bg-white rounded-[40px] shadow-2xl overflow-hidden flex flex-col md:flex-row border-4 border-indigo-500/30">
           <div className="md:w-1/2 bg-indigo-50 p-10 flex flex-col items-center justify-center text-center space-y-6">
-            <img 
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Escudo_de_la_Instituci%C3%B3n_Educativa_Josefa_Campos.png/300px-Escudo_de_la_Instituci%C3%B3n_Educativa_Josefa_Campos.png" 
-              alt="Escudo Josefa Campos" className="w-32 drop-shadow-lg"
-              onError={(e) => { (e.target as HTMLImageElement).src = 'https://via.placeholder.com/200?text=Josefa+Campos'; }}
-            />
+            <div className="w-32 h-32 bg-indigo-600 rounded-3xl flex items-center justify-center shadow-2xl mb-6 rotate-3">
+           <span className="text-6xl">⚛️</span>
+            </div>
             <div className="space-y-2">
               <h1 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tighter uppercase">Laboratorio de Física <span className="text-indigo-600 block">I.E Josefa Campos</span></h1>
               <p className="text-slate-500 font-black uppercase tracking-[0.2em] text-[10px] italic">"Lo que se vive, se enseña"</p>
@@ -107,7 +105,6 @@ const App: React.FC = () => {
              <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32"></div>
              <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full -ml-24 -mb-24"></div>
              <div className="text-white text-center space-y-4 relative z-10">
-                <div className="text-7xl drop-shadow-2xl">⚛️</div>
                 <h2 className="text-2xl font-black uppercase tracking-widest">CIENCIA INTERACTIVA</h2>
                 <p className="text-sm opacity-80 font-medium px-4">Herramienta pedagógica diseñada para facilitar el aprendizaje de la mecánica clásica.</p>
              </div>
