@@ -13,9 +13,12 @@ const AITutor: React.FC<{ activeTab: string }> = ({ activeTab }) => {
 
   useEffect(() => {
     if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+      scrollRef.current.scrollTo({
+        top: scrollRef.current.scrollHeight,
+        behavior: 'smooth'
+      });
     }
-  }, [messages]);
+  }, [messages, loading]);
 
   const handleSend = async () => {
     if (!input.trim() || loading) return;
@@ -25,11 +28,16 @@ const AITutor: React.FC<{ activeTab: string }> = ({ activeTab }) => {
     setMessages(prev => [...prev, { role: 'user', text: userMsg }]);
     setLoading(true);
 
-    const context = `El estudiante está visualizando actualmente el módulo: ${activeTab}. Ayúdale con conceptos teóricos o cálculos relacionados.`;
-    const response = await askPhysicsTutor(userMsg, context);
-    
-    setMessages(prev => [...prev, { role: 'model', text: response }]);
-    setLoading(false);
+    try {
+      const context = `El estudiante está en el módulo: ${activeTab}. Ayúdale con conceptos teóricos o cálculos relacionados con este tema específico de mecánica.`;
+      const response = await askPhysicsTutor(userMsg, context);
+      setMessages(prev => [...prev, { role: 'model', text: response }]);
+    } catch (error) {
+      console.error("Error al enviar mensaje:", error);
+      setMessages(prev => [...prev, { role: 'model', text: "Lo siento, hubo un error en la conexión. Por favor, verifica tu conexión o intenta más tarde." }]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -83,7 +91,8 @@ const AITutor: React.FC<{ activeTab: string }> = ({ activeTab }) => {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
             placeholder="Dime tu duda..."
-            className="flex-1 bg-slate-800/50 border border-slate-700 rounded-2xl px-5 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all text-white placeholder:text-slate-500 font-bold"
+            disabled={loading}
+            className="flex-1 bg-slate-800/50 border border-slate-700 rounded-2xl px-5 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all text-white placeholder:text-slate-500 font-bold disabled:opacity-50"
           />
           <button 
             onClick={handleSend}
