@@ -29,12 +29,14 @@ const AITutor: React.FC<{ activeTab: string }> = ({ activeTab }) => {
     setLoading(true);
 
     try {
-      const context = `El estudiante está en el módulo: ${activeTab}. Ayúdale con conceptos teóricos o cálculos relacionados con este tema específico de mecánica.`;
+      const context = `El estudiante se encuentra en el módulo interactivo de: ${activeTab}.`;
       const response = await askPhysicsTutor(userMsg, context);
+      
+      // La función askPhysicsTutor ahora garantiza devolver un string incluso en errores controlados
       setMessages(prev => [...prev, { role: 'model', text: response }]);
     } catch (error) {
-      console.error("Error al enviar mensaje:", error);
-      setMessages(prev => [...prev, { role: 'model', text: "Lo siento, hubo un error en la conexión. Por favor, verifica tu conexión o intenta más tarde." }]);
+      console.error("Excepción en componente AITutor:", error);
+      setMessages(prev => [...prev, { role: 'model', text: "Lo siento, ocurrió un error inesperado. Por favor, intenta de nuevo en unos segundos." }]);
     } finally {
       setLoading(false);
     }
@@ -42,7 +44,7 @@ const AITutor: React.FC<{ activeTab: string }> = ({ activeTab }) => {
 
   return (
     <div className="flex flex-col h-full bg-slate-900 text-white rounded-[35px] shadow-2xl overflow-hidden border border-slate-800 border-b-[8px] border-b-indigo-700">
-      <div className="p-6 bg-indigo-600 flex items-center justify-between shadow-lg">
+      <div className="p-6 bg-indigo-600 flex items-center justify-between shadow-lg shrink-0">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center rotate-3 shadow-inner">
             <svg className="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -74,23 +76,24 @@ const AITutor: React.FC<{ activeTab: string }> = ({ activeTab }) => {
         ))}
         {loading && (
           <div className="flex justify-start">
-            <div className="bg-slate-800 p-4 rounded-3xl border border-slate-700/50 flex gap-1.5">
+            <div className="bg-slate-800 p-4 rounded-3xl border border-slate-700/50 flex gap-1.5 items-center">
               <div className="w-2 h-2 bg-indigo-500 rounded-full animate-bounce"></div>
               <div className="w-2 h-2 bg-indigo-500 rounded-full animate-bounce delay-100"></div>
               <div className="w-2 h-2 bg-indigo-500 rounded-full animate-bounce delay-200"></div>
+              <span className="text-[9px] text-slate-500 font-black uppercase ml-2 animate-pulse tracking-widest">Consultando...</span>
             </div>
           </div>
         )}
       </div>
 
-      <div className="p-6 bg-slate-900 border-t border-slate-800/50">
+      <div className="p-6 bg-slate-900 border-t border-slate-800/50 shrink-0">
         <div className="flex gap-3">
           <input 
             type="text" 
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-            placeholder="Dime tu duda..."
+            placeholder="Escribe tu duda física aquí..."
             disabled={loading}
             className="flex-1 bg-slate-800/50 border border-slate-700 rounded-2xl px-5 py-3 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all text-white placeholder:text-slate-500 font-bold disabled:opacity-50"
           />
