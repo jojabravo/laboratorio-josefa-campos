@@ -3,10 +3,17 @@ import { GoogleGenAI } from "@google/genai";
 
 export async function askPhysicsTutor(prompt: string, context?: string) {
   try {
-    // Inicialización dentro del try para capturar cualquier error de entorno
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    // Verificamos de forma segura la existencia de la API_KEY antes de inicializar
+    const apiKey = process.env.API_KEY;
     
-    const systemInstruction = `
+    if (!apiKey) {
+      console.warn("API_KEY no detectada. Verifique la configuración del entorno.");
+      return "Hola. Parece que mi conexión con el laboratorio no está activa (falta la configuración del API). Por favor, avísale al profesor Jorge Armando.";
+    }
+
+    const ai = new GoogleGenAI({ apiKey });
+    
+    const systemText = `
       Eres un experto profesor de Física de la Institución Educativa Josefa Campos. 
       Tu objetivo es ayudar a estudiantes de secundaria a entender la mecánica clásica.
       
@@ -19,23 +26,34 @@ export async function askPhysicsTutor(prompt: string, context?: string) {
       Contexto actual de la simulación: ${context || "Mecánica clásica general"}.
     `;
 
-    // Usamos el formato de strings simples para contents y systemInstruction según la documentación
+    // Realizamos la petición usando el modelo flash que es más rápido y estable para chats
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
-      contents: prompt,
+      contents: [{ parts: [{ text: prompt }] }],
       config: {
-        systemInstruction: systemInstruction,
+        systemInstruction: systemText,
         temperature: 0.7,
-        maxOutputTokens: 800,
+        maxOutputTokens: 1000,
       },
     });
 
-    const text = response.text;
-    return text || "Lo siento, no pude generar una respuesta en este momento. ¿Podrías intentar reformular tu duda?";
+    const resultText = response.text;
     
-  } catch (error) {
-    console.error("Error crítico en el Tutor IA:", error);
-    // Devolvemos un string en lugar de lanzar el error para que el componente no colapse
-    return "Hola. Parece que tengo dificultades para conectarme con mis libros de física en este momento. ¿Podrías intentar preguntarme de nuevo en unos segundos? ¡Estoy aquí para ayudarte!";
+    if (!resultText) {
+      throw new Error("Respuesta vacía del servidor.");
+    }
+
+    return resultText;
+    
+  } catch (error: any) {
+    console.error("Error en Tutoría IA:", error);
+    
+    // Manejo de errores específicos (ej. límites de cuota)
+    if (error?.message?.includes('429') || error?.message?.includes('quota')) {
+      return "¡Wow! Muchos científicos están preguntando a la vez. Espera un momento y vuelve a intentarlo.";
+    }
+    
+    // Mensaje de error controlado para que la interfaz no se bloquee
+    return "Tuve un pequeño problema al procesar tu duda. ¿Podrías intentar preguntarme de nuevo? ¡Estoy aquí para ayudarte!";
   }
 }
