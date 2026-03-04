@@ -38,8 +38,8 @@ const PendulumSimulator: React.FC = () => {
   const weight = mass * g;
   const wx = weight * Math.sin(angleRad); // Fuerza restauradora
   const wy = weight * Math.cos(angleRad); // Componente radial
-  // Tensión (Simplificada para nivel escolar: centrípeta + radial)
-  const tension = wy + (mass * Math.pow(omega * (initialAngle * Math.PI / 180), 2) * length);
+  // Tensión (Fórmula exacta: T = mg(3cosθ - 2cosθ₀))
+  const tension = mass * g * (3 * Math.cos(angleRad) - 2 * Math.cos(initialAngle * Math.PI / 180));
 
   const animate = (time: number) => {
     if (lastTimeRef.current !== undefined) {
@@ -175,11 +175,11 @@ const PendulumSimulator: React.FC = () => {
                     <text x="5" y={weight * 2 + 10} fill="#065f46" fontSize="10" fontWeight="bold">W</text>
 
                     {/* Tensión (Red) */}
-                    <line x1="0" y1="0" x2={-Math.sin(angleRad) * tension * 1.5} y2={-Math.cos(angleRad) * tension * 1.5} stroke="#ef4444" strokeWidth="3" markerEnd="url(#arr-red)" />
-                    <text x={-Math.sin(angleRad) * tension * 1.5 - 15} y={-Math.cos(angleRad) * tension * 1.5} fill="#9f1239" fontSize="10" fontWeight="bold">T</text>
+                    <line x1="0" y1="0" x2={-Math.sin(angleRad) * tension * 2} y2={-Math.cos(angleRad) * tension * 2} stroke="#ef4444" strokeWidth="3" markerEnd="url(#arr-red)" />
+                    <text x={-Math.sin(angleRad) * tension * 2 - 15} y={-Math.cos(angleRad) * tension * 2} fill="#9f1239" fontSize="10" fontWeight="bold">T</text>
 
                     {/* Descomposición Peso */}
-                    <g transform={`rotate(${currentAngleDeg})`}>
+                    <g transform={`rotate(${-currentAngleDeg})`}>
                        {/* Wy */}
                        <line x1="0" y1="0" x2="0" y2={wy * 2} stroke="#f97316" strokeWidth="1.5" strokeDasharray="3" markerEnd="url(#arr-org)" />
                        <text x="5" y={wy * 2} fill="#9a3412" fontSize="9">Py</text>
